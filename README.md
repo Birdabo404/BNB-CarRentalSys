@@ -1,2 +1,3 @@
 # BNB-CarRental-System
-An End-To-End Web-Based Platform for our Software Engineering Project in Uni. 
+BNB Car Rental Management System: Development of an End-to-End Web-Based Platform. 
+
