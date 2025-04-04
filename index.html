@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BNB Car Rental - Premium Car Rental Services</title>
+    <link rel="stylesheet" href="../BNB-CarRental-System/Frontend/css/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <h1>BNB<span>Cars</span></h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="cars.html">Cars</a></li>
+                <li><a href="login.html">About Us</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="login.html" class="btn-login">Login</a></li>
+                <li><a href="register.html" class="btn-register">Register</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Find Your Perfect Ride</h1>
+                <p>Premium car rental services at affordable prices</p>
+                <div class="search-box">
+                    <form>
+                        <div class="form-group">
+                            <label for="pickup-location">Pickup Location</label>
+                            <input type="text" id="pickup-location" placeholder="Enter city or airport">
+                        </div>
+                        <div class="form-group">
+                            <label for="pickup-date">Pickup Date</label>
+                            <input type="date" id="pickup-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="return-date">Return Date</label>
+                            <input type="date" id="return-date">
+                        </div>
+                        <button type="submit" class="btn-search">Search Cars</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Cars Section -->
+    <section class="featured-cars">
+        <div class="container">
+            <h2 class="section-title">Featured Cars</h2>
+            <div class="car-grid">
+                <!-- Car Card 1 -->
+                <div class="car-card">
+                    <div class="car-image">
+                        <img src="/placeholder.svg?height=200&width=300" alt="Toyota Camry">
+                    </div>
+                    <div class="car-details">
+                        <h3>Toyota Camry</h3>
+                        <div class="car-features">
+                            <span><i class="fas fa-user"></i> 5 Seats</span>
+                            <span><i class="fas fa-suitcase"></i> 3 Bags</span>
+                            <span><i class="fas fa-gas-pump"></i> Hybrid</span>
+                        </div>
+                        <div class="car-price">
+                            <span class="price">$45</span> / day
+                        </div>
+                        <a href="car-details.html" class="btn-view">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Car Card 2 -->
+                <div class="car-card">
+                    <div class="car-image">
+                        <img src="/placeholder.svg?height=200&width=300" alt="Honda CR-V">
+                    </div>
+                    <div class="car-details">
+                        <h3>Honda CR-V</h3>
+                        <div class="car-features">
+                            <span><i class="fas fa-user"></i> 5 Seats</span>
+                            <span><i class="fas fa-suitcase"></i> 4 Bags</span>
+                            <span><i class="fas fa-gas-pump"></i> SUV</span>
+                        </div>
+                        <div class="car-price">
+                            <span class="price">$55</span> / day
+                        </div>
+                        <a href="car-details.html" class="btn-view">View Details</a>
+                    </div>
+                </div>
+
+                <!-- Car Card 3 -->
+                <div class="car-card">
+                    <div class="car-image">
+                        <img src="/placeholder.svg?height=200&width=300" alt="BMW 3 Series">
+                    </div>
+                    <div class="car-details">
+                        <h3>BMW 3 Series</h3>
+                        <div class="car-features">
+                            <span><i class="fas fa-user"></i> 5 Seats</span>
+                            <span><i class="fas fa-suitcase"></i> 2 Bags</span>
+                            <span><i class="fas fa-gas-pump"></i> Luxury</span>
+                        </div>
+                        <div class="car-price">
+                            <span class="price">$75</span> / day
+                        </div>
+                        <a href="car-details.html" class="btn-view">View Details</a>
+                    </div>
+                </div>
+            </div>
+            <div class="view-all">
+                <a href="cars.html" class="btn-view-all">View All Cars</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Find Your Car</h3>
+                    <p>Browse our selection of cars and choose the one that fits your needs.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Book Your Car</h3>
+                    <p>Select your pickup and return dates and book your car instantly.</p>
+                </div>
+                <div class="step">
+                    <div class="step-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Enjoy Your Ride</h3>
+                    <p>Pick up your car and enjoy your journey with our premium service.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">What Our Customers Say</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"The service was excellent! The car was clean and in perfect condition. Will definitely use BNB Cars again."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="/placeholder.svg?height=50&width=50" alt="John Doe">
+                        </div>
+                        <div class="author-info">
+                            <h4>John Doe</h4>
+                            <p>Regular Customer</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial">
+                    <div class="testimonial-content">
+                        <p>"Fast booking process and great customer service. The prices are reasonable and the cars are top-notch."</p>
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-image">
+                            <img src="/placeholder.svg?height=50&width=50" alt="Jane Smith">
+                        </div>
+                        <div class="author-info">
+                            <h4>Jane Smith</h4>
+                            <p>Business Traveler</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section about">
+                    <h3>About BNB Cars</h3>
+                    <p>BNB Cars offers premium car rental services at affordable prices. We are committed to providing excellent service and quality vehicles.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="cars.html">Cars</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                        <li><a href="terms.html">Terms & Conditions</a></li>
+                        <li><a href="privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section contact">
+                    <h3>Contact Us</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Main Street, City, Country</p>
+                    <p><i class="fas fa-phone"></i> +1 234 567 890</p>
+                    <p><i class="fas fa-envelope"></i> info@bnbcars.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 BNB Cars. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+
