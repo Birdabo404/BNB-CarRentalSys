@@ -2,13 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./Pages/Home";
 import {MouseTrail} from '@stichiboi/react-elegant-mouse-trail';
+import Navbar from './components/ui/Default/Navbar';
 
 function App() {
   return (
     <>
-    <MouseTrail />
-    <NavBar />
-
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -16,6 +14,6 @@ function App() {
     </Router>
     </>
   );
-};
+}
 
 export default App;
