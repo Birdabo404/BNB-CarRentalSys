@@ -1,14 +1,14 @@
-import React from 'react'
-import Navbar from '../components/ui/Default/Navbar'
-import MouseTrail from '../components/ui/Default/Mousetrail'
+import Navbar from "../components/ui/Default/Navbar";
+import MouseTrail from "../components/ui/Default/Mousetrail"
 
-const home = () => {
-  return (
-    <>
-    <Navbar></Navbar>
-    <MouseTrail></MouseTrail>
-    </>
-  )
+const Home = () => {
+    return (
+        <div className="min-h-screen bg-gray-400">
+            <MouseTrail strokeColor="#F97316" lineWidthStart={30} /> {}
+            <Navbar /> {}
+            <h1> TEST </h1>
+        </div>
+    );
 }
 
-export default home
+export default Home;
