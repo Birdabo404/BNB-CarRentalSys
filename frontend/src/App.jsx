@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from "./Pages/Home";
 import {MouseTrail} from '@stichiboi/react-elegant-mouse-trail';
@@ -8,7 +8,6 @@ function App() {
     <>
     <MouseTrail />
     <NavBar />
-    
 
     <Router>
       <Routes>
@@ -17,6 +16,6 @@ function App() {
     </Router>
     </>
   );
-}
+};
 
 export default App;
