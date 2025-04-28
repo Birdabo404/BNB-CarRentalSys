@@ -1,15 +1,14 @@
 import React from 'react'
-import Navbar from './components/ui/Navbar/Navbar.jsx'
-import { MouseTrail } from '@stichiboi/react-elegant-mouse-trail'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
-    <> 
-      <MouseTrail strokeColor="#F97316" lineWidthStart={30} />
-      <Navbar>
-        
-      </Navbar>
-    </>
+    <Router>
+      <Routes>
+        <Route path="/"
+        element={<Home />} />
+      </Routes>
+    </Router>
   )
 }
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-const MouseTrail = () => {
+export const MouseTrail = () => {
   useEffect(() => {
     const trail = [];
     const trailSize = 10;
