@@ -1,15 +1,14 @@
 "use client"
-
 import { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
-  // Handle scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20)
@@ -24,11 +23,13 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-10 w-full transition-all duration-300 ${
-        scrolled ? "bg-white shadow-sm py-4" : "bg-white/90 backdrop-blur-sm py-5"
+      className={`fixed top-0 left-0 right-0 z-10 w-full transition-all duration-300  ${
+        scrolled 
+        ? "bg-white/95 backdrop-blur-lg shadow-sm py-3" 
+        : "bg-white/90 backdrop-blur-sm py-4"
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 flex items-center justify-between">
+      <div className="max-w-6xl mx-30 px-5 flex items-center justify-between">
         <div className="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -46,8 +47,8 @@ const Navbar = () => {
             <circle cx="17" cy="17" r="2" />
           </svg>
           <div className="ml-2">
-            <span className="font-bold text-gray-900">BNB Car</span>
-            <span className="font-bold text-[#FF6B35]"> Rental</span>
+            <span className="font-bold text-gray-900 text-xl">BNB Cars</span>
+            <span className="font-bold text-[#FF6B35] text-xl"> Rental</span>
           </div>
         </div>
 
@@ -62,7 +63,7 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center gap-8">
           {/* Desktop Navigation - now positioned beside auth buttons */}
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-4">
             <NavLink to="/" isActive>
               Home
             </NavLink>
@@ -71,7 +72,7 @@ const Navbar = () => {
           </nav>
 
           {/* Auth Buttons */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Button variant="ghost" className="text-gray-700 transition-transform duration-300 hover:scale-105">
               <span className="flex items-center">→ Login</span>
             </Button>
@@ -143,12 +144,12 @@ const Navbar = () => {
 // Desktop NavLink component with subtle hover animation
 const NavLink = ({ to, children, isActive }) => {
   return (
-    <Link to={to} className="relative px-5 py-2 text-gray-600 hover:text-gray-900 transition-colors duration-200">
+    <Link to={to} className="relative px-3 py-2 text-gray-600 hover:text-gray-900 transition-colors duration-200">
       <span className={`relative z-10 ${isActive ? "text-gray-900 font-medium" : ""}`}>{children}</span>
       {isActive && (
         <span className="absolute bottom-0 left-1/2 w-1.5 h-1.5 bg-[#FF6B35] rounded-full transform -translate-x-1/2 transition-all duration-300"></span>
       )}
-      <span className="absolute inset-0 rounded-full bg-gray-100 opacity-0 transform scale-95 transition-all duration-200 hover:opacity-100 hover:scale-100"></span>
+      <span className="absolute inset-0 rounded-full bg-gray-100 opacity-2 transform scale-95 transition-all duration-200 hover:opacity-100 hover:scale-100"></span>
     </Link>
   )
 }
