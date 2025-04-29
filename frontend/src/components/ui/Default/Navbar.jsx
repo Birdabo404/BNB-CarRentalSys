@@ -29,7 +29,7 @@ const Navbar = () => {
         : "bg-white/90 backdrop-blur-sm py-4"
       }`}
     >
-      <div className="max-w-6xl mx-30 px-5 flex items-center justify-between">
+      <div className="max-w-6xl mx-25 px-5 flex items-center justify-between">
         <div className="flex items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +39,7 @@ const Navbar = () => {
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="w-8 h-8 text-[#FF6B35]"
+            className="w-8 h-15 text-[#FF6B35]"
           >
             <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2" />
             <circle cx="7" cy="17" r="2" />
@@ -47,8 +47,8 @@ const Navbar = () => {
             <circle cx="17" cy="17" r="2" />
           </svg>
           <div className="ml-2">
-            <span className="font-bold text-gray-900 text-xl">BNB Cars</span>
-            <span className="font-bold text-[#FF6B35] text-xl"> Rental</span>
+            <span className="font-extrabold text-gray-900 text-2xl">BNB Cars</span>
+            <span className="font-extrabold text-orange-500 text-2xl"> Rental</span>
           </div>
         </div>
 
@@ -63,11 +63,12 @@ const Navbar = () => {
 
         <div className="hidden lg:flex items-center gap-8">
           {/* Desktop Navigation - now positioned beside auth buttons */}
-          <nav className="flex items-center gap-4">
+          <nav className="flex items-center gap-2">
             <NavLink to="/" isActive>
               Home
             </NavLink>
-            <NavLink to="/models">Models</NavLink>
+            <NavLink to="/models">Explore Cars</NavLink>
+            <NavLink to="/models">About</NavLink>
             <NavLink to="/contact">Contact</NavLink>
           </nav>
 
@@ -123,7 +124,7 @@ const Navbar = () => {
               <MobileNavLink to="/" isActive>
                 Home
               </MobileNavLink>
-              <MobileNavLink to="/models">Models</MobileNavLink>
+              <MobileNavLink to="/models">Explore Cars</MobileNavLink>
               <MobileNavLink to="/contact">Contact</MobileNavLink>
             </nav>
             <div className="mt-auto p-4 border-t">

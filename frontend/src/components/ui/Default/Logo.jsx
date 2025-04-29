@@ -20,9 +20,9 @@ const Logo = ({ scrolled = false }) => {
         </svg>
       </div>
       <div className="ml-2 flex gap-2 items-baseline">
-        <span className="font-bold text-orange-500 text-xl">BNB</span>
-        <span className="font-bold text-gray-900 text-xl">Car</span>
-        <span className="font-bold text-gray-900 text-xl"> Rental</span>
+        <span className="font-bold text-orange-500 text-2xl">BNB</span>
+        <span className="font-bold text-gray-900 text-2xl">Car</span>
+        <span className="font-bold text-gray-900 text-2xl"> Rental</span>
       </div>
     </div>
   )
