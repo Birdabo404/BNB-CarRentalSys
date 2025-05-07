@@ -77,7 +77,7 @@ const sampleCars = [
     status: "Available",
     dailyRate: 280,
     category: "SUV",
-    imageURL: "https://cdn.pixabay.com/photo/2017/01/06/19/15/mitsubishi-1957040_1280.jpg",
+    imageURL: "https://www.mitsubishi-motors.com.ph/content/dam/mitsubishi-motors-ph/images/cars/montero-sport/2023/models/ks1wgupgpl-ge-e74/primary/exterior/U28_135_22QX-GT4WD.png",
     seats: 7,
     transmission: "Automatic",
     fuel: "Diesel",
@@ -93,7 +93,8 @@ const pickupLocations = [
   "Bancasi Airport",
   "Robinsons Place",
   "SM City Butuan",
-  "Langihan Terminal"
+  "Langihan Terminal",
+  "CSU lang"
 ]
 
 const ExploreCars = () => {

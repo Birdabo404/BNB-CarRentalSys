@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
-import { Link, useLocation } from "react-router-dom"
-import { Menu, X, Moon, Sun, UserPlus, LogIn } from "lucide-react"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { Menu, X, Moon, Sun, UserPlus, LogIn, User, ChevronDown, LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Skeuomorphic and animation styles for the navbar
@@ -62,11 +62,20 @@ if (typeof document !== 'undefined' && !document.getElementById('skeuo-navbar-st
   document.head.appendChild(style);
 }
 
+const getMockUser = () => {
+  if (localStorage.getItem("mockLoggedIn") === "true") {
+    return localStorage.getItem("mockUsername") || "Customer"
+  }
+  return null
+}
+
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [darkMode, setDarkMode] = useState(() => window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
   const location = useLocation()
+  const navigate = useNavigate()
+  const [user, setUser] = useState(getMockUser())
 
   useEffect(() => {
     const handleScroll = () => {
@@ -80,8 +89,21 @@ const Navbar = () => {
     document.documentElement.classList.toggle('dark', darkMode)
   }, [darkMode])
 
+  useEffect(() => {
+    const handleStorage = () => setUser(getMockUser())
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [])
+
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem("mockLoggedIn")
+    localStorage.removeItem("mockUsername")
+    setUser(null)
+    navigate("/")
   }
 
   const navLinks = [
@@ -114,6 +136,7 @@ const Navbar = () => {
             </svg>
             <span className={`font-extrabold text-2xl ${darkMode ? 'text-gray-900' : 'text-gray-900'}`}>BNB Cars</span>
             <span className={`font-extrabold text-2xl ${darkMode ? 'text-orange-500' : 'text-orange-500'}`}>Rental</span>
+            <span className="font-bold text-red-500 dark:text-red-300"> TEST ENVIRONMENT</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -125,23 +148,47 @@ const Navbar = () => {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className={`skeuo-navlink${darkMode ? ' skeuo-navlink-dark' : ''}${isActive ? (darkMode ? ' skeuo-navlink-active-dark' : ' skeuo-navlink-active') : ''}`}
+                    className={`skeuo-navlink${isActive ? ' skeuo-navlink-active' : ''}`}
                   >
                     {link.label}
                   </Link>
                 )
               })}
             </nav>
-            <Link to="/login">
-              <Button className="bg-[#FF6B35] hover:bg-[#FF5722] text-white font-bold px-5 py-2 rounded-lg shadow transition-transform duration-300 hover:scale-105 flex items-center gap-2">
-                <LogIn className="w-5 h-5 text-white" /> Login
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button className="bg-white border border-[#FF6B35] text-[#FF6B35] font-bold px-5 py-2 rounded-lg shadow transition-transform duration-300 hover:scale-105 flex items-center gap-2">
-                <UserPlus className="w-5 h-5 text-[#FF6B35]" /> Register
-              </Button>
-            </Link>
+            {user ? (
+              <div className="relative group">
+                <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-[#fff7f2] text-[#FF6B35] font-bold shadow hover:bg-[#ffe3d1] transition">
+                  <User className="w-5 h-5" /> {user} <ChevronDown className="w-4 h-4" />
+                </button>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition-opacity z-50">
+                  <Link to="/dashboard" className="flex items-center gap-2 px-4 py-3 hover:bg-[#fff7f2] text-gray-700">
+                    <User className="w-4 h-4" /> Dashboard
+                  </Link>
+                  <Link to="/dashboard?tab=reservations" className="flex items-center gap-2 px-4 py-3 hover:bg-[#fff7f2] text-gray-700">
+                    <LogIn className="w-4 h-4" /> My Reservations
+                  </Link>
+                  <Link to="/dashboard?tab=profile" className="flex items-center gap-2 px-4 py-3 hover:bg-[#fff7f2] text-gray-700">
+                    <UserPlus className="w-4 h-4" /> Profile
+                  </Link>
+                  <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-3 w-full text-left hover:bg-[#fff7f2] text-red-500">
+                    <LogOut className="w-4 h-4" /> Logout
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
+                <Link to="/login">
+                  <Button className="bg-[#FF6B35] hover:bg-[#FF5722] text-white font-bold px-5 py-2 rounded-lg shadow transition-transform duration-300 hover:scale-105 flex items-center gap-2">
+                    <LogIn className="w-5 h-5 text-white" /> Login
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button className="bg-white border border-[#FF6B35] text-[#FF6B35] font-bold px-5 py-2 rounded-lg shadow transition-transform duration-300 hover:scale-105 flex items-center gap-2">
+                    <UserPlus className="w-5 h-5 text-[#FF6B35]" /> Register
+                  </Button>
+                </Link>
+              </>
+            )}
             <button
               className={`skeuo-navbar-toggle${darkMode ? ' skeuo-navbar-toggle-dark' : ''}`}
               aria-label="Toggle dark mode"
@@ -188,6 +235,7 @@ const Navbar = () => {
                 <div className="ml-2">
                   <span className="font-bold text-gray-900 dark:text-gray-100">BNB Car</span>
                   <span className="font-bold text-[#FF6B35] dark:text-orange-300"> Rental</span>
+                  <span className="font-bold text-red-500 dark:text-red-300"> TEST ENV</span>
                 </div>
               </div>
               <button

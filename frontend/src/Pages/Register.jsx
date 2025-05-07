@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Mail, Lock, UserPlus, Eye, EyeOff, IdCard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -11,6 +11,8 @@ const Register = () => {
   const [licensePreview, setLicensePreview] = useState(null)
   const [idFile, setIdFile] = useState(null)
   const [idPreview, setIdPreview] = useState(null)
+  const [name, setName] = useState("")
+  const navigate = useNavigate()
 
   const handleLicenseFile = (e) => {
     const file = e.target.files[0]
@@ -33,6 +35,14 @@ const Register = () => {
     } else {
       setIdPreview(null)
     }
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    // Set mock login state and username
+    localStorage.setItem("mockLoggedIn", "true")
+    localStorage.setItem("mockUsername", name || "Customer")
+    navigate("/dashboard")
   }
 
   return (
@@ -60,14 +70,14 @@ const Register = () => {
         </div>
         <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Create an Account</h2>
         <p className="text-gray-600 mb-8 text-center">Sign up to get started with BNB Car Rental</p>
-        <form className="space-y-6 w-full">
+        <form className="space-y-6 w-full" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label htmlFor="name" className="block text-gray-700 font-medium">
               Name
             </label>
             <div className="relative">
               <UserPlus className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input id="name" type="text" placeholder="Enter your name" className="pl-10 py-6" />
+              <Input id="name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Enter your name" className="pl-10 py-6" />
             </div>
           </div>
           <div className="space-y-2">
