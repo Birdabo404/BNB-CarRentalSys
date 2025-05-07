@@ -1,13 +1,13 @@
 "use client"
 import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
-import { Menu, X, Moon, Sun } from "lucide-react"
+import { Menu, X, Moon, Sun, UserPlus, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 // Skeuomorphic and animation styles for the navbar
 const skeuoNavbarStyles = `
 .skeuo-navbar {
-  background: rgba(250,250,252,0.85);
+  background: rgba(250,250,252,0.97);
   border-radius: 1.5rem;
   box-shadow: 0 4px 24px 0 rgba(30, 41, 59, 0.08), 0 1.5px 0 #fff inset;
   border: 1.5px solid #ececec;
@@ -17,11 +17,6 @@ const skeuoNavbarStyles = `
   position: relative;
   transition: background 0.3s, box-shadow 0.3s, border 0.3s;
   backdrop-filter: blur(12px);
-}
-.skeuo-navbar-dark {
-  background: rgba(24,24,32,0.85);
-  border: 1.5px solid #23232b;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18), 0 1.5px 0 #23232b inset;
 }
 .skeuo-navlink {
   position: relative;
@@ -43,17 +38,6 @@ const skeuoNavbarStyles = `
   background: rgba(255,107,53,0.13);
   box-shadow: 0 2px 12px 0 rgba(255,107,53,0.13);
 }
-.skeuo-navlink-dark {
-  color: #eee;
-}
-.skeuo-navlink-dark:hover, .skeuo-navlink-dark:focus {
-  color: #FFB385;
-  background: rgba(255,107,53,0.10);
-}
-.skeuo-navlink-active-dark {
-  color: #FFB385;
-  background: rgba(255,107,53,0.18);
-}
 .skeuo-navbar-toggle {
   background: none;
   border: none;
@@ -68,9 +52,6 @@ const skeuoNavbarStyles = `
 }
 .skeuo-navbar-toggle:hover {
   background: rgba(255,107,53,0.10);
-}
-.skeuo-navbar-toggle-dark:hover {
-  background: rgba(255,107,53,0.18);
 }
 `;
 
@@ -131,8 +112,8 @@ const Navbar = () => {
               <path d="M9 17h6" />
               <circle cx="17" cy="17" r="2" />
             </svg>
-            <span className={`font-extrabold text-2xl ${darkMode ? 'text-gray-100' : 'text-gray-900'}`}>BNB Cars</span>
-            <span className={`font-extrabold text-2xl ${darkMode ? 'text-orange-300' : 'text-orange-500'}`}>Rental</span>
+            <span className={`font-extrabold text-2xl ${darkMode ? 'text-gray-900' : 'text-gray-900'}`}>BNB Cars</span>
+            <span className={`font-extrabold text-2xl ${darkMode ? 'text-orange-500' : 'text-orange-500'}`}>Rental</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -152,13 +133,13 @@ const Navbar = () => {
               })}
             </nav>
             <Link to="/login">
-              <Button variant="ghost" className="text-gray-700 dark:text-gray-200 transition-transform duration-300 hover:scale-105">
-                <span className="flex items-center">→ Login</span>
+              <Button className="bg-[#FF6B35] hover:bg-[#FF5722] text-white font-bold px-5 py-2 rounded-lg shadow transition-transform duration-300 hover:scale-105 flex items-center gap-2">
+                <LogIn className="w-5 h-5 text-white" /> Login
               </Button>
             </Link>
-            <Link to="/signup">
-              <Button className="bg-[#FF6B35] hover:bg-[#FF5722] text-white transition-transform duration-300 hover:scale-105">
-                Sign Up
+            <Link to="/register">
+              <Button className="bg-white border border-[#FF6B35] text-[#FF6B35] font-bold px-5 py-2 rounded-lg shadow transition-transform duration-300 hover:scale-105 flex items-center gap-2">
+                <UserPlus className="w-5 h-5 text-[#FF6B35]" /> Register
               </Button>
             </Link>
             <button
@@ -239,8 +220,8 @@ const Navbar = () => {
                     Login
                   </Button>
                 </Link>
-                <Link to="/signup" className="w-full">
-                  <Button className="w-full bg-[#FF6B35] hover:bg-[#FF5722]">Sign Up</Button>
+                <Link to="/register" className="w-full">
+                  <Button className="w-full bg-[#FF6B35] hover:bg-[#FF5722]">Register</Button>
                 </Link>
                 <button
                   className={`skeuo-navbar-toggle mt-2${darkMode ? ' skeuo-navbar-toggle-dark' : ''}`}

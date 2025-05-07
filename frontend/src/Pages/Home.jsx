@@ -10,11 +10,13 @@ import {
   Calendar,
   CreditCardIcon as PaymentIcon,
   CheckCircle,
+  Search,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { MouseTrail } from "@stichiboi/react-elegant-mouse-trail"
 import Navbar from "../components/ui/Default/Navbar"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 // Add these styles to the top of the file if using CSS-in-JS, or move to your CSS file if preferred
 const skeuoStyles = `
@@ -116,63 +118,64 @@ if (typeof document !== 'undefined' && !document.getElementById('city-lights-dar
   document.head.appendChild(style);
 }
 
+// Add Google Fonts import for Nunito (rounded, bold)
+if (typeof document !== 'undefined' && !document.getElementById('nunito-font')) {
+  const link = document.createElement('link');
+  link.id = 'nunito-font';
+  link.rel = 'stylesheet';
+  link.href = 'https://fonts.googleapis.com/css2?family=Nunito:wght@800;900&display=swap';
+  document.head.appendChild(link);
+}
+
 const Home = () => {
+  const [search, setSearch] = useState("")
+  const navigate = useNavigate()
+
+  const handleSearch = (e) => {
+    e.preventDefault()
+    if (search.trim()) {
+      navigate(`/models?search=${encodeURIComponent(search.trim())}`)
+    }
+  }
+
   return (
-    <div className="min-h-screen bg-white relative overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#f7f7f9] to-[#f0f4fa] flex flex-col items-center justify-start">
       <CityLightsBG />
       <Navbar />
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center bg-white/80 rounded-3xl backdrop-blur-xl shadow-xl p-8">
-            <div className="max-w-2xl mx-auto lg:mx-0">
-              <div className="inline-flex items-center bg-orange-100 text-[#FF6B35] px-4 py-2 rounded-full mb-8">
-                <Star className="w-4 h-4 mr-2" />
-                <span className="text-red-800 text-sm">Affordable Quality Car Rentals</span>
-              </div>
-              <h1 className="text-5xl font-bold mb-8 text-center lg:text-left">
-                Barato nga{" "}
-                <span className="text-[#FF6B35] font-bold text-6xl font-monospace tracking-wider">RENTALS!</span>{" "}
-                Premium na <span className="text-[#FF6B35] text-6xl">Service!</span>
-              </h1>
-              <p className="text-gray-600 mb-10 text-lg leading-relaxed text-center lg:text-left">
-                Explore Butuan and beyond with BNB Car Rental — where premium Quality meets affordability!
-              </p>
-              <div className="flex flex-wrap justify-center lg:justify-start gap-8">
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-3">
-                    <Shield className="w-6 h-6 text-[#FF6B35]" />
-                  </div>
-                  <span className="text-gray-700 font-medium font-monospace">Fully Insured</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-3">
-                    <Clock className="w-6 h-6 text-[#FF6B35]" />
-                  </div>
-                  <span className="text-gray-700 font-medium">24/7 Support</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center mr-3">
-                    <CreditCard className="w-6 h-6 text-[#FF6B35]" />
-                  </div>
-                  <span className="text-gray-700 font-medium">Flexible Payment</span>
-                </div>
-              </div>
+      <section className="w-full flex flex-col items-center justify-center pt-36 pb-20 px-4">
+        <div className="max-w-2xl w-full mx-auto text-center">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-4 leading-tight" style={{ fontFamily: 'Nunito, Arial, sans-serif', fontWeight: 900 }}>
+            Barato nga <span className="text-[#FF6B35]">RENTALS!</span><br />Premium na <span className="text-[#FF6B35]">Service!</span>
+          </h1>
+          <p className="text-lg md:text-xl text-gray-600 mb-8 font-medium">
+            Explore Butuan and beyond with BNB Car Rental — where premium Quality meets affordability!
+          </p>
+          {/* Car Brand Search */}
+          <form className="flex items-center justify-center gap-2 w-full mb-10" onSubmit={handleSearch}>
+            <div className="relative w-full max-w-md mx-auto">
+              <input
+                type="text"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search for a car brand (e.g. Toyota, Honda, Ford…)"
+                className="w-full py-4 pl-12 pr-4 rounded-2xl border border-gray-200 bg-white shadow focus:outline-none focus:ring-2 focus:ring-[#FF6B35] text-lg transition"
+              />
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6" />
             </div>
-            <div className="relative mx-auto lg:mx-0 flex items-center justify-center">
-              <div className="relative z-10">
-                <img
-                  src="Honda-civic.png"
-                  alt="Honda-Civic-PNG"
-                  className="rounded-lg object-contain w-full h-auto transition-transform duration-700 hover:scale-105 bg-transparent shadow-lg"
-                  style={{background: 'transparent'}}
-                />
-                <div className="absolute -bottom-1 right-20 bg-white p-3 rounded-lg shadow-md">
-                  <p className="font-medium text-gray-900 tracking-normal text-sm">Latest Models</p>
-                  <p className="text-sm text-gray-500">Premium Selection</p>
-                </div>
-              </div>
-              <div className="absolute -z-10 top-8 right-8 w-full h-full bg-gray-100 rounded-lg"></div>
+          </form>
+          {/* Features Row */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mt-2">
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#fff7f2] shadow-sm">
+              <Shield className="w-6 h-6 text-[#FF6B35]" />
+              <span className="font-semibold text-gray-800">Fully Insured</span>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#fff7f2] shadow-sm">
+              <Clock className="w-6 h-6 text-[#FF6B35]" />
+              <span className="font-semibold text-gray-800">24/7 Support</span>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3 rounded-xl bg-[#fff7f2] shadow-sm">
+              <CreditCard className="w-6 h-6 text-[#FF6B35]" />
+              <span className="font-semibold text-gray-800">Flexible Payment</span>
             </div>
           </div>
         </div>
