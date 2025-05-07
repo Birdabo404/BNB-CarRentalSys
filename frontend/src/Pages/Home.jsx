@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button"
 import { MouseTrail } from "@stichiboi/react-elegant-mouse-trail"
 import Navbar from "../components/ui/Default/Navbar"
 import { Link, useNavigate } from "react-router-dom"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 // Add these styles to the top of the file if using CSS-in-JS, or move to your CSS file if preferred
 const skeuoStyles = `
@@ -129,7 +129,9 @@ if (typeof document !== 'undefined' && !document.getElementById('nunito-font')) 
 
 const Home = () => {
   const [search, setSearch] = useState("")
+  const [searchFocus, setSearchFocus] = useState(false)
   const navigate = useNavigate()
+  const searchRef = useRef()
 
   const handleSearch = (e) => {
     e.preventDefault()
@@ -139,10 +141,13 @@ const Home = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-[#f7f7f9] to-[#f0f4fa] flex flex-col items-center justify-start">
+    <div className="min-h-screen bg-gradient-to-br from-white via-[#f7f7f9] to-[#f0f4fa] flex flex-col items-center justify-start relative">
+      {searchFocus && (
+        <div className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm transition-all" onClick={() => { setSearchFocus(false); searchRef.current.blur(); }} />
+      )}
       <CityLightsBG />
       <Navbar />
-      <section className="w-full flex flex-col items-center justify-center pt-36 pb-20 px-4">
+      <section className="w-full flex flex-col items-center justify-center pt-36 pb-20 px-4 relative z-40">
         <div className="max-w-2xl w-full mx-auto text-center">
           <h1 className="text-5xl md:text-6xl font-extrabold mb-4 leading-tight" style={{ fontFamily: 'Nunito, Arial, sans-serif', fontWeight: 900 }}>
             Barato nga <span className="text-[#FF6B35]">RENTALS!</span><br />Premium na <span className="text-[#FF6B35]">Service!</span>
@@ -154,9 +159,12 @@ const Home = () => {
           <form className="flex items-center justify-center gap-2 w-full mb-10" onSubmit={handleSearch}>
             <div className="relative w-full max-w-md mx-auto">
               <input
+                ref={searchRef}
                 type="text"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
+                onFocus={() => setSearchFocus(true)}
+                onBlur={() => setTimeout(() => setSearchFocus(false), 120)}
                 placeholder="Search for a car brand (e.g. Toyota, Honda, Ford…)"
                 className="w-full py-4 pl-12 pr-4 rounded-2xl border border-gray-200 bg-white shadow focus:outline-none focus:ring-2 focus:ring-[#FF6B35] text-lg transition"
               />

@@ -3,6 +3,7 @@ import Home from "./Pages/Home"
 import Login from "./Pages/Login"
 import Register from "./Pages/Register"
 import ExploreCars from "./Pages/ExploreCars"
+import Payment from "./Pages/Payment"
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/models" element={<ExploreCars />} />
+        <Route path="/payment" element={<Payment />} />
         <Route path="/contact" element={<div className="pt-32 container mx-auto px-4">Contact Page</div>} />
       </Routes>
     </Router>

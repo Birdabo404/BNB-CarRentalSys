@@ -1,11 +1,39 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { Mail, Lock, UserPlus, Eye, EyeOff } from "lucide-react"
+import { Mail, Lock, UserPlus, Eye, EyeOff, IdCard } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const [licenseNumber, setLicenseNumber] = useState("")
+  const [licenseFile, setLicenseFile] = useState(null)
+  const [licensePreview, setLicensePreview] = useState(null)
+  const [idFile, setIdFile] = useState(null)
+  const [idPreview, setIdPreview] = useState(null)
+
+  const handleLicenseFile = (e) => {
+    const file = e.target.files[0]
+    setLicenseFile(file)
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (ev) => setLicensePreview(ev.target.result)
+      reader.readAsDataURL(file)
+    } else {
+      setLicensePreview(null)
+    }
+  }
+  const handleIdFile = (e) => {
+    const file = e.target.files[0]
+    setIdFile(file)
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (ev) => setIdPreview(ev.target.result)
+      reader.readAsDataURL(file)
+    } else {
+      setIdPreview(null)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f7f7f9] px-2 py-8">
@@ -71,6 +99,29 @@ const Register = () => {
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
+          </div>
+          {/* Driver's License Number */}
+          <div className="space-y-2">
+            <label htmlFor="licenseNumber" className="block text-gray-700 font-medium flex items-center gap-2">
+              <IdCard className="w-5 h-5 text-gray-400" /> Driver's License Number
+            </label>
+            <Input id="licenseNumber" type="text" value={licenseNumber} onChange={e => setLicenseNumber(e.target.value)} placeholder="Enter your license number" className="py-6" />
+          </div>
+          {/* License Photo Upload */}
+          <div className="space-y-2">
+            <label className="block text-gray-700 font-medium flex items-center gap-2">
+              <IdCard className="w-5 h-5 text-gray-400" /> Upload Driver's License Photo
+            </label>
+            <input type="file" accept="image/*" onChange={handleLicenseFile} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]" />
+            {licensePreview && <img src={licensePreview} alt="License Preview" className="mt-2 rounded-lg shadow w-full max-h-32 object-contain" />}
+          </div>
+          {/* Government ID Upload */}
+          <div className="space-y-2">
+            <label className="block text-gray-700 font-medium flex items-center gap-2">
+              <IdCard className="w-5 h-5 text-gray-400" /> Upload Government-issued ID
+            </label>
+            <input type="file" accept="image/*" onChange={handleIdFile} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]" />
+            {idPreview && <img src={idPreview} alt="ID Preview" className="mt-2 rounded-lg shadow w-full max-h-32 object-contain" />}
           </div>
           <Button
             type="submit"

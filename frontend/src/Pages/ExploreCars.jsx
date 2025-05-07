@@ -88,6 +88,14 @@ const sampleCars = [
 const isLoggedIn = () => localStorage.getItem("mockLoggedIn") === "true"
 const setLoggedIn = (val) => localStorage.setItem("mockLoggedIn", val ? "true" : "false")
 
+const pickupLocations = [
+  "Butuan City Center",
+  "Bancasi Airport",
+  "Robinsons Place",
+  "SM City Butuan",
+  "Langihan Terminal"
+]
+
 const ExploreCars = () => {
   const location = useLocation()
   const navigate = useNavigate()
@@ -98,6 +106,11 @@ const ExploreCars = () => {
   const [showModal, setShowModal] = useState(false)
   const [loginState, setLoginState] = useState(isLoggedIn())
   const modalRef = useRef()
+  const [bookingModal, setBookingModal] = useState(false)
+  const [pickup, setPickup] = useState("")
+  const [startDate, setStartDate] = useState("")
+  const [endDate, setEndDate] = useState("")
+  const [bookingError, setBookingError] = useState("")
 
   useEffect(() => {
     setSearch(initialSearch)
@@ -158,6 +171,45 @@ const ExploreCars = () => {
     setLoggedIn(false)
     setLoginState(false)
     alert("You are now logged out.")
+  }
+
+  const openBookingModal = (car) => {
+    setModalCar(car)
+    setShowModal(false)
+    setBookingModal(true)
+    setPickup("")
+    setStartDate("")
+    setEndDate("")
+    setBookingError("")
+  }
+
+  const handleBookingConfirm = () => {
+    if (!pickup || !startDate || !endDate) {
+      setBookingError("Please select pickup location, start date, and end date.")
+      return
+    }
+    const start = new Date(startDate)
+    const end = new Date(endDate)
+    if (end <= start) {
+      setBookingError("End date must be after start date.")
+      return
+    }
+    const days = Math.ceil((end - start) / (1000 * 60 * 60 * 24))
+    const subtotal = modalCar.dailyRate * days
+    const tax = subtotal * 0.12
+    const total = subtotal + tax
+    navigate("/payment", {
+      state: {
+        car: modalCar,
+        pickup,
+        startDate,
+        endDate,
+        days,
+        subtotal,
+        tax,
+        total
+      }
+    })
   }
 
   // Add card and badge animation styles
@@ -253,7 +305,7 @@ const ExploreCars = () => {
             </div>
             <button
               className="w-full py-4 mt-2 rounded-xl bg-[#FF6B35] hover:bg-[#FF5722] text-white font-bold text-lg shadow transition disabled:opacity-60 disabled:cursor-not-allowed"
-              onClick={handleBookNow}
+              onClick={() => openBookingModal(modalCar)}
             >
               Book Now
             </button>
@@ -281,6 +333,41 @@ const ExploreCars = () => {
             >
               <UserPlus className="w-5 h-5" /> Register
             </a>
+          </div>
+        </div>
+      )}
+      {/* Booking modal for pickup and dates */}
+      {bookingModal && modalCar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-all">
+          <div ref={modalRef} className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8 relative animate-zoomIn">
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-700" onClick={() => { setBookingModal(false); setModalCar(null) }}>
+              <X className="w-6 h-6" />
+            </button>
+            <h3 className="text-2xl font-bold mb-4">Book {modalCar.make} {modalCar.model}</h3>
+            <div className="mb-4">
+              <label className="block text-gray-700 font-medium mb-2">Pick-up Location</label>
+              <select value={pickup} onChange={e => setPickup(e.target.value)} className="w-full rounded-xl border border-gray-200 py-3 px-4 mb-2 focus:ring-2 focus:ring-[#FF6B35]">
+                <option value="">Select location...</option>
+                {pickupLocations.map(loc => <option key={loc} value={loc}>{loc}</option>)}
+              </select>
+            </div>
+            <div className="mb-4 flex gap-4">
+              <div className="flex-1">
+                <label className="block text-gray-700 font-medium mb-2">Start Date</label>
+                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} className="w-full rounded-xl border border-gray-200 py-3 px-4 focus:ring-2 focus:ring-[#FF6B35]" />
+              </div>
+              <div className="flex-1">
+                <label className="block text-gray-700 font-medium mb-2">End Date</label>
+                <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} className="w-full rounded-xl border border-gray-200 py-3 px-4 focus:ring-2 focus:ring-[#FF6B35]" />
+              </div>
+            </div>
+            {bookingError && <div className="text-red-500 text-sm mb-2">{bookingError}</div>}
+            <button
+              className="w-full py-4 mt-2 rounded-xl bg-[#FF6B35] hover:bg-[#FF5722] text-white font-bold text-lg shadow transition"
+              onClick={handleBookingConfirm}
+            >
+              Continue to Payment
+            </button>
           </div>
         </div>
       )}
