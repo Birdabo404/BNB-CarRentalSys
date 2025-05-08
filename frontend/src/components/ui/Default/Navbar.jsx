@@ -119,21 +119,21 @@ const Navbar = () => {
         <div className="flex items-center justify-between w-full">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2" style={{textDecoration: 'none'}}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
               className="w-8 h-8 text-[#FF6B35]"
-            >
-              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2" />
-              <circle cx="7" cy="17" r="2" />
-              <path d="M9 17h6" />
-              <circle cx="17" cy="17" r="2" />
-            </svg>
+          >
+            <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.3 1 12.1 1 13v3c0 .6.4 1 1 1h2" />
+            <circle cx="7" cy="17" r="2" />
+            <path d="M9 17h6" />
+            <circle cx="17" cy="17" r="2" />
+          </svg>
             <span className={`font-extrabold text-2xl ${darkMode ? 'text-gray-900' : 'text-gray-900'}`}>BNB Cars</span>
             <span className={`font-extrabold text-2xl ${darkMode ? 'text-orange-500' : 'text-orange-500'}`}>Rental</span>
             <span className="font-bold text-red-500 dark:text-red-300"> TEST ENVIRONMENT</span>
@@ -173,7 +173,7 @@ const Navbar = () => {
                   <button onClick={handleLogout} className="flex items-center gap-2 px-4 py-3 w-full text-left hover:bg-[#fff7f2] text-red-500">
                     <LogOut className="w-4 h-4" /> Logout
                   </button>
-                </div>
+          </div>
               </div>
             ) : (
               <>
@@ -196,16 +196,16 @@ const Navbar = () => {
             >
               {darkMode ? <Sun className="w-5 h-5 text-yellow-300 animate-spin-slow" /> : <Moon className="w-5 h-5 text-gray-700" />}
             </button>
-          </div>
+        </div>
 
-          {/* Mobile menu button */}
-          <button
+        {/* Mobile menu button */}
+        <button
             className="lg:hidden skeuo-navbar-toggle"
-            onClick={toggleMenu}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          onClick={toggleMenu}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
         </div>
 
         {/* Mobile Menu */}
@@ -264,9 +264,9 @@ const Navbar = () => {
             <div className="mt-auto p-4 border-t border-gray-200 dark:border-gray-700">
               <div className="flex flex-col gap-3">
                 <Link to="/login" className="w-full">
-                  <Button variant="outline" className="w-full">
-                    Login
-                  </Button>
+                <Button variant="outline" className="w-full">
+                  Login
+                </Button>
                 </Link>
                 <Link to="/register" className="w-full">
                   <Button className="w-full bg-[#FF6B35] hover:bg-[#FF5722]">Register</Button>
