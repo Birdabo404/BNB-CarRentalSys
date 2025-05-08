@@ -165,8 +165,8 @@ const Home = () => {
                 onChange={e => setSearch(e.target.value)}
                 onFocus={() => setSearchFocus(true)}
                 onBlur={() => setTimeout(() => setSearchFocus(false), 120)}
-                placeholder="Search for a car brand (e.g. Toyota, Honda, Ford…)"
-                className="w-full py-4 pl-12 pr-4 rounded-2xl border border-gray-200 bg-white shadow focus:outline-none focus:ring-2 focus:ring-[#FF6B35] text-lg transition"
+                placeholder="Search for a car brand (e.g. Toyota, Honda)"
+                className="w-full py-4 pl-12 pr-4 rounded-2xl border border-gray-200 bg-white shadow focus:outline-none focus:ring-2 focus:ring-[#FF6B35] text-lg transition duration-900"
               />
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-6 h-6" />
             </div>
