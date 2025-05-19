@@ -1,13 +1,34 @@
 "use client"
 
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { Star, Shield, Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setError("")
+    setLoading(true)
+
+    try {
+      // Will be implemented with API
+      console.log("Login attempt with:", { email, password })
+      navigate("/dashboard")
+    } catch (err) {
+      setError("Invalid email or password")
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#f7f7f9] px-2 py-8">
@@ -35,14 +56,22 @@ const Login = () => {
         </div>
         <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Login to Your Account</h2>
         <p className="text-gray-600 mb-8 text-center">Welcome back! Please enter your details</p>
-        <form className="space-y-6 w-full">
+        <form className="space-y-6 w-full" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label htmlFor="email" className="block text-gray-700 font-medium">
               Email
             </label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input id="email" type="email" placeholder="Enter your email" className="pl-10 py-6" />
+              <Input 
+                id="email" 
+                type="email" 
+                placeholder="Enter your email" 
+                className="pl-10 py-6"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
           </div>
           <div className="space-y-2">
@@ -58,6 +87,9 @@ const Login = () => {
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
                 className="pl-10 py-6"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <button
                 type="button"
@@ -73,11 +105,15 @@ const Login = () => {
               </Link>
             </div>
           </div>
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
           <Button
             type="submit"
             className="w-full bg-[#FF6B35] hover:bg-[#FF5722] text-white py-6 h-auto font-bold text-lg rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.02]"
+            disabled={loading}
           >
-            <LogIn className="mr-2 h-5 w-5" /> Sign in
+            <LogIn className="mr-2 h-5 w-5" /> {loading ? "Signing in..." : "Sign in"}
           </Button>
           <div className="relative flex items-center justify-center">
             <div className="border-t border-gray-300 absolute w-full"></div>

@@ -12,6 +12,10 @@ const Register = () => {
   const [idFile, setIdFile] = useState(null)
   const [idPreview, setIdPreview] = useState(null)
   const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
+  const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
 
   const handleLicenseFile = (e) => {
@@ -25,6 +29,7 @@ const Register = () => {
       setLicensePreview(null)
     }
   }
+
   const handleIdFile = (e) => {
     const file = e.target.files[0]
     setIdFile(file)
@@ -37,12 +42,27 @@ const Register = () => {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Set mock login state and username
-    localStorage.setItem("mockLoggedIn", "true")
-    localStorage.setItem("mockUsername", name || "Customer")
-    navigate("/dashboard")
+    setError("")
+    setLoading(true)
+
+    try {
+      // Will be implemented with API
+      console.log("Registration attempt with:", {
+        name,
+        email,
+        password,
+        licenseNumber,
+        licenseFile,
+        idFile
+      })
+      navigate("/dashboard")
+    } catch (err) {
+      setError("Registration failed. Please try again.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -66,40 +86,51 @@ const Register = () => {
               <circle cx="17" cy="17" r="2" />
             </svg>
           </div>
-          <span className="text-2xl font-extrabold text-[#FF6B35] tracking-wide">BNB Car Rental</span>
+          <span className="text-2xl font-extrabold text-black tracking-wide ">BNB</span>
+          <span className="text-2xl font-extrabold text-[#FF6B35] tracking-wide">Car Rental</span>
         </div>
         <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Create an Account</h2>
-        <p className="text-gray-600 mb-8 text-center">Sign up to get started with BNB Car Rental</p>
+        <p className="text-gray-600 mb-8 text-center">Join us and start your journey with BNB Car Rental</p>
         <form className="space-y-6 w-full" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <label htmlFor="name" className="block text-gray-700 font-medium">
-              Name
-            </label>
-            <div className="relative">
-              <UserPlus className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input id="name" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Enter your name" className="pl-10 py-6" />
-            </div>
+            <label htmlFor="name" className="block text-gray-700 font-medium">Full Name</label>
+            <Input 
+              id="name" 
+              type="text" 
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your full name" 
+              className="py-6"
+              required
+            />
           </div>
           <div className="space-y-2">
-            <label htmlFor="email" className="block text-gray-700 font-medium">
-              Email
-            </label>
+            <label htmlFor="email" className="block text-gray-700 font-medium">Email</label>
             <div className="relative">
               <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-              <Input id="email" type="email" placeholder="Enter your email" className="pl-10 py-6" />
+              <Input 
+                id="email" 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email" 
+                className="pl-10 py-6"
+                required
+              />
             </div>
           </div>
           <div className="space-y-2">
-            <label htmlFor="password" className="block text-gray-700 font-medium">
-              Password
-            </label>
+            <label htmlFor="password" className="block text-gray-700 font-medium">Password</label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 id="password"
                 type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 className="pl-10 py-6"
+                required
               />
               <button
                 type="button"
@@ -110,47 +141,63 @@ const Register = () => {
               </button>
             </div>
           </div>
-          {/* Driver's License Number */}
           <div className="space-y-2">
             <label htmlFor="licenseNumber" className="block text-gray-700 font-medium flex items-center gap-2">
               <IdCard className="w-5 h-5 text-gray-400" /> Driver's License Number
             </label>
-            <Input id="licenseNumber" type="text" value={licenseNumber} onChange={e => setLicenseNumber(e.target.value)} placeholder="Enter your license number" className="py-6" />
+            <Input 
+              id="licenseNumber" 
+              type="text" 
+              value={licenseNumber} 
+              onChange={e => setLicenseNumber(e.target.value)} 
+              placeholder="Enter your license number" 
+              className="py-6"
+              required
+            />
           </div>
-          {/* License Photo Upload */}
           <div className="space-y-2">
             <label className="block text-gray-700 font-medium flex items-center gap-2">
               <IdCard className="w-5 h-5 text-gray-400" /> Upload Driver's License Photo
             </label>
-            <input type="file" accept="image/*" onChange={handleLicenseFile} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]" />
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleLicenseFile} 
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]"
+              required
+            />
             {licensePreview && <img src={licensePreview} alt="License Preview" className="mt-2 rounded-lg shadow w-full max-h-32 object-contain" />}
           </div>
-          {/* Government ID Upload */}
           <div className="space-y-2">
             <label className="block text-gray-700 font-medium flex items-center gap-2">
               <IdCard className="w-5 h-5 text-gray-400" /> Upload Government-issued ID
             </label>
-            <input type="file" accept="image/*" onChange={handleIdFile} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]" />
+            <input 
+              type="file" 
+              accept="image/*" 
+              onChange={handleIdFile} 
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]"
+              required
+            />
             {idPreview && <img src={idPreview} alt="ID Preview" className="mt-2 rounded-lg shadow w-full max-h-32 object-contain" />}
           </div>
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
+          )}
           <Button
             type="submit"
             className="w-full bg-[#FF6B35] hover:bg-[#FF5722] text-white py-6 h-auto font-bold text-lg rounded-xl shadow-md transition-transform duration-300 hover:scale-[1.02]"
+            disabled={loading}
           >
-            Create Account
+            <UserPlus className="mr-2 h-5 w-5" /> {loading ? "Creating Account..." : "Create Account"}
           </Button>
+          <p className="text-center text-gray-600">
+            Already have an account?{" "}
+            <Link to="/login" className="text-[#FF6B35] hover:text-[#FF5722] font-medium">
+              Sign in
+            </Link>
+          </p>
         </form>
-        <p className="mt-8 text-center text-gray-600">
-          Already have an account?{' '}
-          <Link to="/login" className="text-[#FF6B35] hover:text-[#FF5722] font-medium">
-            Login
-          </Link>
-        </p>
-        <div className="mt-8 text-center">
-          <Link to="/" className="text-gray-500 hover:text-gray-700 text-sm">
-            ← Back to home
-          </Link>
-        </div>
       </div>
     </div>
   )

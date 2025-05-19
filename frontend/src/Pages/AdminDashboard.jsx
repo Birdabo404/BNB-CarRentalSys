@@ -16,18 +16,22 @@ import { Button } from "@/components/ui/button"
 const AdminDashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    // Check if admin is logged in
-    if (localStorage.getItem("mockAdminLoggedIn") !== "true") {
-      navigate("/admin/login")
-    }
-  }, [navigate])
+    // Will be implemented with API
+    setLoading(false)
+  }, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem("mockAdminLoggedIn")
-    localStorage.removeItem("mockAdminName")
-    navigate("/admin/login")
+  const handleLogout = async () => {
+    try {
+      // Will be implemented with API
+      console.log("Logging out admin")
+      navigate("/admin/login")
+    } catch (err) {
+      console.error("Logout failed:", err)
+    }
   }
 
   const navItems = [
@@ -40,133 +44,84 @@ const AdminDashboard = () => {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
+      {/* Mobile Sidebar Toggle */}
+      <button
+        className="fixed top-4 left-4 z-50 p-2 rounded-lg bg-[#111111] border border-[#222222] lg:hidden"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+      >
+        {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+      </button>
+
       {/* Sidebar */}
       <aside
-        className={`fixed top-0 left-0 h-full bg-[#111111] border-r border-[#222222] transition-all duration-300 ${
-          isSidebarOpen ? "w-64" : "w-20"
-        }`}
+        className={`fixed top-0 left-0 h-full w-64 bg-[#111111] border-r border-[#222222] transform transition-transform duration-200 ease-in-out z-40 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
       >
-        <div className="flex items-center justify-between p-4 border-b border-[#222222]">
-          {isSidebarOpen && (
-            <div className="flex items-center gap-2">
-              <Car className="w-6 h-6 text-[#FF6B35]" />
-              <span className="font-bold text-lg">BNB Admin</span>
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-8 h-8 bg-[#FF6B35] rounded-lg flex items-center justify-center">
+              <Car className="w-5 h-5 text-white" />
             </div>
-          )}
-          <button
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="p-2 hover:bg-[#222222] rounded-lg transition-colors"
-          >
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            <span className="text-xl font-bold">Admin Panel</span>
+          </div>
+          <nav className="space-y-1">
+            {navItems.map((item) => (
+              <a
+                key={item.path}
+                href={item.path}
+                className="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-400 hover:text-white hover:bg-[#1A1A1A] transition-colors"
+              >
+                <item.icon className="w-5 h-5" />
+                <span>{item.label}</span>
+              </a>
+            ))}
+          </nav>
         </div>
-
-        <nav className="p-4 space-y-2">
-          {navItems.map((item) => (
-            <button
-              key={item.path}
-              className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-[#222222] transition-colors group"
-            >
-              <item.icon className="w-5 h-5 text-gray-400 group-hover:text-[#FF6B35]" />
-              {isSidebarOpen && (
-                <span className="text-gray-300 group-hover:text-white">
-                  {item.label}
-                </span>
-              )}
-            </button>
-          ))}
-        </nav>
-
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-[#222222]">
-          <button
+        <div className="absolute bottom-0 left-0 right-0 p-6">
+          <Button
+            variant="ghost"
+            className="w-full flex items-center gap-3 text-gray-400 hover:text-white hover:bg-[#1A1A1A]"
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-[#222222] transition-colors group"
           >
-            <LogOut className="w-5 h-5 text-gray-400 group-hover:text-red-500" />
-            {isSidebarOpen && (
-              <span className="text-gray-300 group-hover:text-red-500">
-                Logout
-              </span>
-            )}
-          </button>
+            <LogOut className="w-5 h-5" />
+            <span>Logout</span>
+          </Button>
         </div>
       </aside>
 
       {/* Main Content */}
       <main
-        className={`transition-all duration-300 ${
-          isSidebarOpen ? "ml-64" : "ml-20"
+        className={`min-h-screen transition-all duration-200 ${
+          isSidebarOpen ? "lg:ml-64" : ""
         }`}
       >
         <div className="p-8">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="text-2xl font-bold">Dashboard Overview</h1>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-[#FF6B35] flex items-center justify-center">
-                  <span className="text-white font-bold">A</span>
-                </div>
-                <span className="text-gray-300">Admin</span>
-                <ChevronDown className="w-4 h-4 text-gray-400" />
+          {loading ? (
+            <div className="text-center text-gray-400">Loading dashboard...</div>
+          ) : error ? (
+            <div className="text-center text-red-400">{error}</div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Dashboard cards will be implemented with API data */}
+              <div className="bg-[#111111] rounded-xl border border-[#222222] p-6">
+                <h3 className="text-gray-400 mb-2">Total Vehicles</h3>
+                <p className="text-2xl font-bold">0</p>
+              </div>
+              <div className="bg-[#111111] rounded-xl border border-[#222222] p-6">
+                <h3 className="text-gray-400 mb-2">Active Bookings</h3>
+                <p className="text-2xl font-bold">0</p>
+              </div>
+              <div className="bg-[#111111] rounded-xl border border-[#222222] p-6">
+                <h3 className="text-gray-400 mb-2">Total Customers</h3>
+                <p className="text-2xl font-bold">0</p>
+              </div>
+              <div className="bg-[#111111] rounded-xl border border-[#222222] p-6">
+                <h3 className="text-gray-400 mb-2">Revenue</h3>
+                <p className="text-2xl font-bold">₱0</p>
               </div>
             </div>
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {[
-              { label: "Total Vehicles", value: "24", icon: Car },
-              { label: "Active Reservations", value: "12", icon: Calendar },
-              { label: "Total Customers", value: "156", icon: Users },
-              { label: "Monthly Revenue", value: "₱45,678", icon: BarChart3 },
-            ].map((stat, index) => (
-              <div
-                key={index}
-                className="bg-[#111111] p-6 rounded-xl border border-[#222222] hover:border-[#333333] transition-colors"
-              >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-gray-400">{stat.label}</span>
-                  <stat.icon className="w-5 h-5 text-[#FF6B35]" />
-                </div>
-                <div className="text-2xl font-bold">{stat.value}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Recent Activity */}
-          <div className="bg-[#111111] rounded-xl border border-[#222222] p-6">
-            <h2 className="text-xl font-bold mb-4">Recent Activity</h2>
-            <div className="space-y-4">
-              {[
-                {
-                  action: "New reservation",
-                  details: "Toyota Innova - 3 days",
-                  time: "2 hours ago",
-                },
-                {
-                  action: "Vehicle added",
-                  details: "Honda City 2024",
-                  time: "5 hours ago",
-                },
-                {
-                  action: "Payment received",
-                  details: "₱12,500 - Reservation #1234",
-                  time: "1 day ago",
-                },
-              ].map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 rounded-lg hover:bg-[#222222] transition-colors"
-                >
-                  <div>
-                    <div className="font-medium">{activity.action}</div>
-                    <div className="text-sm text-gray-400">{activity.details}</div>
-                  </div>
-                  <div className="text-sm text-gray-500">{activity.time}</div>
-                </div>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
       </main>
     </div>
