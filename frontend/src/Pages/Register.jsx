@@ -1,8 +1,97 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Mail, Lock, UserPlus, Eye, EyeOff, IdCard } from "lucide-react"
+import { Mail, Lock, UserPlus, Eye, EyeOff, IdCard, Cloud, Sun, CloudRain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+
+// Real-time info component
+const RealTimeInfo = () => {
+  const [currentTime, setCurrentTime] = useState(new Date())
+  const [weather, setWeather] = useState({
+    temp: 28,
+    condition: 'sunny',
+    location: 'Butuan City'
+  })
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    // Mock weather data for Butuan City - in real app, you'd fetch from weather API
+    const mockWeatherData = [
+      { temp: 28, condition: 'sunny', location: 'Butuan City' },
+      { temp: 26, condition: 'partly-cloudy', location: 'Butuan City' },
+      { temp: 30, condition: 'cloudy', location: 'Butuan City' }
+    ]
+    
+    setWeather(mockWeatherData[0])
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    })
+  }
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    })
+  }
+
+  const getWeatherIcon = () => {
+    switch(weather.condition) {
+      case 'sunny': return <Sun className="w-8 h-8 text-yellow-400" />
+      case 'cloudy': return <Cloud className="w-8 h-8 text-gray-300" />
+      case 'rainy': return <CloudRain className="w-8 h-8 text-blue-400" />
+      default: return <Cloud className="w-8 h-8 text-gray-300" />
+    }
+  }
+
+  return (
+    <div className="absolute top-6 left-6 text-white z-20">
+      <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            {getWeatherIcon()}
+            <span className="text-2xl font-light">{weather.temp}°</span>
+          </div>
+          <div className="border-l border-white/20 pl-4">
+            <div className="text-sm text-white/80">{weather.location}</div>
+            <div className="text-lg font-medium">{formatTime(currentTime)}</div>
+          </div>
+        </div>
+        <div className="text-sm text-white/70 mt-2">{formatDate(currentTime)}</div>
+      </div>
+    </div>
+  )
+}
+
+// Real city background component with blur animation (no zooming)
+const CityBackground = () => (
+  <div className="fixed inset-0 z-0">
+    {/* Real city image background with blur animation */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-blur-fade"
+      style={{
+        backgroundImage: `url('/flatiron-building.jpg')`,
+      }}
+    />
+    
+    {/* Animated white overlay that fades with the blur */}
+    <div 
+      className="absolute inset-0 animate-white-fade"
+    />
+  </div>
+)
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -48,15 +137,34 @@ const Register = () => {
     setLoading(true)
 
     try {
-      // Will be implemented with API
-      console.log("Registration attempt with:", {
+      // Validation
+      if (!name || !email || !password || !licenseNumber || !licenseFile || !idFile) {
+        setError("Please fill all fields and upload required documents")
+        return
+      }
+
+      if (password.length < 6) {
+        setError("Password must be at least 6 characters long")
+        return
+      }
+
+      // Mock registration - simulate account creation
+      console.log("Registration successful for:", {
         name,
         email,
-        password,
         licenseNumber,
-        licenseFile,
-        idFile
+        hasLicense: !!licenseFile,
+        hasId: !!idFile
       })
+
+      // Store login state after successful registration
+      localStorage.setItem("mockLoggedIn", "true")
+      localStorage.setItem("mockUsername", name)
+      localStorage.setItem("mockEmail", email)
+      
+      // Trigger storage event to update navbar
+      window.dispatchEvent(new Event("storage"))
+      
       navigate("/dashboard")
     } catch (err) {
       setError("Registration failed. Please try again.")
@@ -66,8 +174,11 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f7f7f9] px-2 py-8">
-      <div className="w-full max-w-md skeuo-card p-8 shadow-xl rounded-3xl flex flex-col items-center">
+    <div className="min-h-screen flex items-center justify-center px-2 py-8 relative overflow-hidden">
+      <CityBackground />
+      <RealTimeInfo />
+      
+      <div className="w-full max-w-md skeuo-card p-8 shadow-xl rounded-3xl flex flex-col items-center relative z-10 bg-white/90 backdrop-blur-md border border-white/20">
         <div className="flex items-center mb-8">
           <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
             <svg
@@ -100,7 +211,7 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your full name" 
-              className="py-6"
+              className="py-6 bg-white/95 backdrop-blur-sm border-white/30"
               required
             />
           </div>
@@ -114,7 +225,7 @@ const Register = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email" 
-                className="pl-10 py-6"
+                className="pl-10 py-6 bg-white/95 backdrop-blur-sm border-white/30"
                 required
               />
             </div>
@@ -129,7 +240,7 @@ const Register = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
-                className="pl-10 py-6"
+                className="pl-10 py-6 bg-white/95 backdrop-blur-sm border-white/30"
                 required
               />
               <button
@@ -151,7 +262,7 @@ const Register = () => {
               value={licenseNumber} 
               onChange={e => setLicenseNumber(e.target.value)} 
               placeholder="Enter your license number" 
-              className="py-6"
+              className="py-6 bg-white/95 backdrop-blur-sm border-white/30"
               required
             />
           </div>
@@ -163,7 +274,7 @@ const Register = () => {
               type="file" 
               accept="image/*" 
               onChange={handleLicenseFile} 
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2]/95 file:text-[#FF6B35] hover:file:bg-[#ffe3d1]/95 file:backdrop-blur-sm"
               required
             />
             {licensePreview && <img src={licensePreview} alt="License Preview" className="mt-2 rounded-lg shadow w-full max-h-32 object-contain" />}
@@ -176,7 +287,7 @@ const Register = () => {
               type="file" 
               accept="image/*" 
               onChange={handleIdFile} 
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2] file:text-[#FF6B35] hover:file:bg-[#ffe3d1]"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#fff7f2]/95 file:text-[#FF6B35] hover:file:bg-[#ffe3d1]/95 file:backdrop-blur-sm"
               required
             />
             {idPreview && <img src={idPreview} alt="ID Preview" className="mt-2 rounded-lg shadow w-full max-h-32 object-contain" />}
@@ -191,16 +302,56 @@ const Register = () => {
           >
             <UserPlus className="mr-2 h-5 w-5" /> {loading ? "Creating Account..." : "Create Account"}
           </Button>
-          <p className="text-center text-gray-600">
-            Already have an account?{" "}
-            <Link to="/login" className="text-[#FF6B35] hover:text-[#FF5722] font-medium">
-              Sign in
-            </Link>
-          </p>
         </form>
+        <p className="mt-8 text-center text-gray-600">
+          Already have an account?{' '}
+          <Link to="/login" className="text-[#FF6B35] hover:text-[#FF5722] font-medium">
+            Sign in
+          </Link>
+        </p>
+        <div className="mt-8 text-center">
+          <Link to="/" className="text-gray-500 hover:text-gray-700 text-sm">
+            ← Back to home
+          </Link>
+        </div>
       </div>
+
+      <style>{`
+        @keyframes blur-fade {
+          0%, 100% { 
+            filter: blur(8px);
+          }
+          50% { 
+            filter: blur(3px);
+          }
+        }
+        
+        @keyframes white-fade {
+          0%, 100% { 
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+          }
+          50% { 
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+          }
+        }
+        
+        .animate-blur-fade {
+          animation: blur-fade 15s ease-in-out infinite;
+        }
+        
+        .animate-white-fade {
+          animation: white-fade 15s ease-in-out infinite;
+        }
+        
+        .skeuo-card {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+      `}</style>
     </div>
   )
 }
 
-export default Register 
+export default Register

@@ -8,6 +8,8 @@ const Payment = () => {
   const data = location.state
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [showXendit, setShowXendit] = useState(false)
+  const [paymentSuccess, setPaymentSuccess] = useState(false)
 
   if (!data) {
     return (
@@ -24,28 +26,36 @@ const Payment = () => {
 
   const { car, pickup, startDate, endDate, days, subtotal, tax, total } = data
 
-  const handlePayment = async () => {
-    setLoading(true)
-    setError(null)
+  const handlePayment = () => {
+    setShowXendit(true)
+  }
 
-    try {
-      // Will be implemented with API
-      console.log("Processing payment for:", {
-        car,
-        pickup,
-        startDate,
-        endDate,
-        days,
-        subtotal,
-        tax,
-        total
-      })
+  const handleXenditPay = () => {
+    // Update car status in adminVehicles
+    const adminVehicles = JSON.parse(localStorage.getItem("adminVehicles") || "[]")
+    const updatedVehicles = adminVehicles.map(v => v.id === car.id ? { ...v, status: "Rented" } : v)
+    localStorage.setItem("adminVehicles", JSON.stringify(updatedVehicles))
+    // Add reservation for user
+    const userEmail = localStorage.getItem("mockEmail") || "guest"
+    const reservationsKey = `userReservations_${userEmail}`
+    const reservations = JSON.parse(localStorage.getItem(reservationsKey) || "[]")
+    reservations.push({
+      car,
+      pickup,
+      startDate,
+      endDate,
+      days,
+      total,
+      timestamp: Date.now()
+    })
+    localStorage.setItem(reservationsKey, JSON.stringify(reservations))
+    // Trigger storage event for real-time sync
+    window.dispatchEvent(new Event("storage"))
+    setPaymentSuccess(true)
+    setTimeout(() => {
+      setShowXendit(false)
       navigate("/dashboard")
-    } catch (err) {
-      setError("Payment failed. Please try again.")
-    } finally {
-      setLoading(false)
-    }
+    }, 2000)
   }
 
   return (
@@ -113,6 +123,38 @@ const Payment = () => {
           </div>
         </div>
       </div>
+      {/* Mock Xendit Modal */}
+      {showXendit && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative animate-zoomIn">
+            <button className="absolute top-4 right-4 text-gray-400 hover:text-gray-700" onClick={() => setShowXendit(false)}>
+              ×
+            </button>
+            <div className="flex flex-col items-center">
+              <img src="https://assets-global.website-files.com/5e8cfc60d6b6b37b2b5b2b2c/5f3a2b2b2b2b2b2b2b2b2b2b_xendit-logo.svg" alt="Xendit" className="h-10 mb-4" />
+              <h2 className="text-2xl font-bold mb-2">Xendit Payment Gateway</h2>
+              <p className="text-gray-600 mb-6">Pay ₱{total.toLocaleString()} for your booking</p>
+              {!paymentSuccess ? (
+                <button
+                  onClick={handleXenditPay}
+                  className="w-full bg-[#FF6B35] hover:bg-[#FF5722] text-white font-bold py-3 rounded-xl transition-colors mb-2"
+                >
+                  Pay Now
+                </button>
+              ) : (
+                <div className="text-green-600 font-bold text-lg mb-2">Payment Successful!</div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+      <style>{`
+        @keyframes zoomIn {
+          0% { transform: scale(0.85); opacity: 0; }
+          100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-zoomIn { animation: zoomIn 0.25s cubic-bezier(.4,2,.6,1); }
+      `}</style>
     </div>
   )
 }

@@ -1,10 +1,99 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { Star, Shield, Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react"
+import { Star, Shield, Eye, EyeOff, Mail, Lock, LogIn, Cloud, Sun, CloudRain } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+
+// Real-time info component
+const RealTimeInfo = () => {
+  const [currentTime, setCurrentTime] = useState(new Date())
+  const [weather, setWeather] = useState({
+    temp: 28,
+    condition: 'sunny',
+    location: 'Butuan City'
+  })
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+
+    // Mock weather data for Butuan City - in real app, you'd fetch from weather API
+    const mockWeatherData = [
+      { temp: 28, condition: 'sunny', location: 'Butuan City' },
+      { temp: 26, condition: 'partly-cloudy', location: 'Butuan City' },
+      { temp: 30, condition: 'cloudy', location: 'Butuan City' }
+    ]
+    
+    setWeather(mockWeatherData[0])
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    })
+  }
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      month: 'long', 
+      day: 'numeric',
+      year: 'numeric'
+    })
+  }
+
+  const getWeatherIcon = () => {
+    switch(weather.condition) {
+      case 'sunny': return <Sun className="w-8 h-8 text-yellow-400" />
+      case 'cloudy': return <Cloud className="w-8 h-8 text-gray-300" />
+      case 'rainy': return <CloudRain className="w-8 h-8 text-blue-400" />
+      default: return <Cloud className="w-8 h-8 text-gray-300" />
+    }
+  }
+
+  return (
+    <div className="absolute top-6 left-6 text-white z-20">
+      <div className="bg-black/20 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            {getWeatherIcon()}
+            <span className="text-2xl font-light">{weather.temp}°</span>
+          </div>
+          <div className="border-l border-white/20 pl-4">
+            <div className="text-sm text-white/80">{weather.location}</div>
+            <div className="text-lg font-medium">{formatTime(currentTime)}</div>
+          </div>
+        </div>
+        <div className="text-sm text-white/70 mt-2">{formatDate(currentTime)}</div>
+      </div>
+    </div>
+  )
+}
+
+// Real city background component with blur animation (no zooming)
+const CityBackground = () => (
+  <div className="fixed inset-0 z-0">
+    {/* Real city image background with blur animation */}
+    <div 
+      className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-blur-fade"
+      style={{
+        backgroundImage: `url('/flatiron-building.jpg')`,
+      }}
+    />
+    
+    {/* Animated white overlay that fades with the blur */}
+    <div 
+      className="absolute inset-0 animate-white-fade"
+    />
+  </div>
+)
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -20,19 +109,33 @@ const Login = () => {
     setLoading(true)
 
     try {
-      // Will be implemented with API
-      console.log("Login attempt with:", { email, password })
-      navigate("/dashboard")
+      // Mock authentication - check credentials
+      if (email === "user@bnb.com" && password === "user123") {
+        // Store login state
+        localStorage.setItem("mockLoggedIn", "true")
+        localStorage.setItem("mockUsername", "Clyde Heinrich")
+        localStorage.setItem("mockEmail", email)
+        
+        // Trigger storage event to update navbar
+        window.dispatchEvent(new Event("storage"))
+        
+        navigate("/dashboard")
+      } else {
+        setError("Invalid email or password.")
+      }
     } catch (err) {
-      setError("Invalid email or password")
+      setError("Login failed. Please try again.")
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f7f7f9] px-2 py-8">
-      <div className="w-full max-w-md skeuo-card p-8 shadow-xl rounded-3xl flex flex-col items-center">
+    <div className="min-h-screen flex items-center justify-center px-2 py-8 relative overflow-hidden">
+      <CityBackground />
+      <RealTimeInfo />
+      
+      <div className="w-full max-w-md skeuo-card p-8 shadow-xl rounded-3xl flex flex-col items-center relative z-10 bg-white/90 backdrop-blur-md border border-white/20">
         <div className="flex items-center mb-8">
           <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-3">
             <svg
@@ -56,6 +159,16 @@ const Login = () => {
         </div>
         <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Login to Your Account</h2>
         <p className="text-gray-600 mb-8 text-center">Welcome back! Please enter your details</p>
+        
+        {/* Demo Credentials */}
+        <div className="mb-6 p-4 bg-orange-50/95 backdrop-blur-sm border border-orange-200 rounded-lg">
+          <h3 className="font-semibold text-orange-800 mb-2">Demo Credentials:</h3>
+          <div className="text-sm text-orange-700">
+            <div><strong>User:</strong> user@bnb.com / user123</div>
+            <div><strong>Admin:</strong> <Link to="/admin/login" className="text-orange-600 hover:text-orange-800">Go to Admin Login</Link> (admin / admin123)</div>
+          </div>
+        </div>
+
         <form className="space-y-6 w-full" onSubmit={handleSubmit}>
           <div className="space-y-2">
             <label htmlFor="email" className="block text-gray-700 font-medium">
@@ -67,7 +180,7 @@ const Login = () => {
                 id="email" 
                 type="email" 
                 placeholder="Enter your email" 
-                className="pl-10 py-6"
+                className="pl-10 py-6 bg-white/95 backdrop-blur-sm border-white/30"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -86,7 +199,7 @@ const Login = () => {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                className="pl-10 py-6"
+                className="pl-10 py-6 bg-white/95 backdrop-blur-sm border-white/30"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -121,7 +234,7 @@ const Login = () => {
           </div>
           <button
             type="button"
-            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-3 px-4 text-gray-700 hover:bg-gray-50 transition-all duration-200"
+            className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-md py-3 px-4 text-gray-700 hover:bg-gray-50 transition-all duration-200 bg-white/95 backdrop-blur-sm"
           >
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -156,6 +269,41 @@ const Login = () => {
           </Link>
         </div>
       </div>
+
+      <style>{`
+        @keyframes blur-fade {
+          0%, 100% { 
+            filter: blur(8px);
+          }
+          50% { 
+            filter: blur(3px);
+          }
+        }
+        
+        @keyframes white-fade {
+          0%, 100% { 
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.25), transparent);
+          }
+          50% { 
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.05), transparent);
+          }
+        }
+        
+        .animate-blur-fade {
+          animation: blur-fade 15s ease-in-out infinite;
+        }
+        
+        .animate-white-fade {
+          animation: white-fade 15s ease-in-out infinite;
+        }
+        
+        .skeuo-card {
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+        }
+      `}</style>
     </div>
   )
 }
