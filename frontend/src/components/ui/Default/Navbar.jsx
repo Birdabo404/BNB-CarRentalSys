@@ -136,7 +136,6 @@ const Navbar = () => {
           </svg>
             <span className={`font-extrabold text-2xl ${darkMode ? 'text-gray-900' : 'text-gray-900'}`}>BNB Cars</span>
             <span className={`font-extrabold text-2xl ${darkMode ? 'text-orange-500' : 'text-orange-500'}`}>Rental</span>
-            <span className="font-bold text-red-500 dark:text-red-300"> TEST ENVIRONMENT</span>
           </Link>
 
           {/* Desktop Nav */}
@@ -235,7 +234,6 @@ const Navbar = () => {
                 <div className="ml-2">
                   <span className="font-bold text-gray-900 dark:text-gray-100">BNB Car</span>
                   <span className="font-bold text-[#FF6B35] dark:text-orange-300"> Rental</span>
-                  <span className="font-bold text-red-500 dark:text-red-300"> TEST ENV</span>
                 </div>
               </div>
               <button
